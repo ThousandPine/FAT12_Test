@@ -1,6 +1,10 @@
 #pragma once
 
+#include <windows.h>
+
 #include "types.h"
+
+extern struct bios_pram_block bpb;  /* 全局的BPB单例 */
 
 /*
  * FAT12/16引导扇区信息
@@ -34,7 +38,7 @@ struct fat_boot_sector
 
 /*
  * 简化过的BPB信息
- * 仅保留计算时需要的内容
+ * 仅保留计算需要的内容
  */
 struct bios_pram_block
 {
@@ -50,3 +54,9 @@ struct bios_pram_block
     u8 vol_lab[11];
     u8 fs_type[8];
 };
+
+void disk_open_vol(char vol_name);
+DWORD disk_read(void *buffer, DWORD offset, DWORD size);
+DWORD disk_write(void *buffer, DWORD offset, DWORD size);
+void disk_read_bpb(struct bios_pram_block *bpb);
+void disk_close();

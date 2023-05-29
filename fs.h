@@ -1,10 +1,11 @@
 #pragma once
 
-#include "io.h"
+void ls();
 
-void list_file();
+void cd(const char *dir);
 
-void change_dir(disk &disk, const char *dir);
+void make_dir(const char *dir);
 
-void make_dir(disk &disk, const char *dir);
+void touch(const char *dir);
 
+void rm(const char *dir);
