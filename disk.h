@@ -4,7 +4,7 @@
 
 #include "types.h"
 
-extern struct bios_pram_block bpb;  /* 全局的BPB单例 */
+extern struct bios_pram_block bpb;  /* 声明可全局访问的BPB */
 
 /*
  * FAT12/16引导扇区信息
@@ -37,8 +37,9 @@ struct fat_boot_sector
 } __attribute__((packed));
 
 /*
- * 简化过的BPB信息
- * 仅保留计算需要的内容
+ * BIOS参数块
+ * 记录了FAT分区的基本参数
+ * 已进行简化，仅保留计算需要的内容
  */
 struct bios_pram_block
 {

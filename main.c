@@ -7,14 +7,14 @@
 
 #define VOL_NAME 'h' /* 卷标，根据自己的分区进行调整 */
 
-struct bios_pram_block bpb;
+struct bios_pram_block bpb; /* 定义全局PBP */
 
 void parse_cmd(char *input, int *opt, char *cmd);
 
 int main(int argc, char *argv[])
 {
-	disk_open_vol(VOL_NAME);
-	disk_read_bpb(&bpb);
+	disk_open_vol(VOL_NAME);	/* 打开分区 */
+	disk_read_bpb(&bpb);		/* 读取BIOS参数块 */
 
 	const int SIZE = 1000;
 	int opt;
@@ -29,23 +29,23 @@ int main(int argc, char *argv[])
 
 		switch (opt)
 		{
-		case 1: /* ls */
+		case 1: /* ls 显示文件列表 */
 			ls();
 			break;
 
-		case 2: /* cd  */
+		case 2: /* cd 切换目录 */
 			cd(arg);
 			break;
 
-		case 3: /* mkdir */
-			make_dir(arg);
+		case 3: /* mkdir 创建目录 */
+			mkdir(arg);
 			break;
 
-		case 4: /* touch */
+		case 4: /* touch 创建文件 */
 			touch(arg);
 			break;
 
-		case 5: /* rm */
+		case 5: /* rm 删除文件/目录 */
 			rm(arg);
 			break;
 		default:

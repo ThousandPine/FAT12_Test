@@ -4,7 +4,7 @@ void ls();
 
 void cd(const char *dir);
 
-void make_dir(const char *dir);
+void mkdir(const char *dir);
 
 void touch(const char *dir);
 
