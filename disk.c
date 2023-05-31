@@ -32,7 +32,16 @@ DWORD disk_read(void *buffer, DWORD offset, DWORD size)
     OVERLAPPED over = {0};
     over.Offset = offset;
 
-    if (size >= 512)
+    /*
+     * 偏移非512整数倍
+     * 
+     */
+    if(offset % 512 != 0)
+    {
+        
+    }
+
+    if (size % 512 == 0 && offset % 512 == 0)
     {
         if (ReadFile(_handle, buffer, size, &readsize, &over) == 0)
         {
@@ -42,8 +51,7 @@ DWORD disk_read(void *buffer, DWORD offset, DWORD size)
         }
     }
     /*
-     * 直接读小于512字节的内容会报错
-     * 所以需要先读取512字节然后再把需要的部分拷贝回去 
+     * 
      */
     else
     {
@@ -96,6 +104,7 @@ void disk_read_bpb(struct bios_pram_block *bpb)
     bpb->rsvd_sec_cnt = bs.rsvd_sec_cnt;
     bpb->num_fats = bs.num_fats;
     bpb->root_ent_cnt = bs.root_ent_cnt;
+    bpb->sec_per_fat = bs.sec_per_fat_16;
     bpb->tot_sec = bs.tot_sec_16 != 0 ? bs.tot_sec_16 : bs.tot_sec_32;
     bpb->vol_id = bs.vol_id;
     memcpy(bpb->vol_lab, bs.vol_lab, sizeof(bpb->vol_lab));
