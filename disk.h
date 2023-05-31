@@ -57,7 +57,7 @@ struct bios_pram_block
 };
 
 void disk_open_vol(char vol_name);
-DWORD disk_read(void *buffer, DWORD offset, DWORD size);
-DWORD disk_write(void *buffer, DWORD offset, DWORD size);
+void disk_read(void *buffer, DWORD offset, DWORD size);
+void disk_write(void *buffer, DWORD offset, DWORD size);
 void disk_read_bpb(struct bios_pram_block *bpb);
 void disk_close();
