@@ -3,7 +3,6 @@
 
 #include "disk.h"
 #include "fs.h"
-#include "debug.h"
 
 #define VOL_NAME 'g' /* 卷标，根据自己的分区进行调整 */
 
