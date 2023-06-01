@@ -9,7 +9,6 @@
 
 struct bios_pram_block bpb; /* 定义全局PBP */
 
-void parse_cmd(char *input, int *opt, char *cmd);
 void print_bpb(struct bios_pram_block *bpb);
 
 int main(int argc, char *argv[])
@@ -20,71 +19,45 @@ int main(int argc, char *argv[])
 
 	const int SIZE = 1000;
 	int opt;
-	char arg[SIZE];
 	char cmd[SIZE];
+	char arg[SIZE];
 
 	while (1)
 	{
-		gets(cmd);
-		parse_cmd(cmd, &opt, arg);
+		cmd[0] = arg[0] = '\0';
 
-		switch (opt)
-		{
-		case 1: /* ls 显示文件列表 */
-			ls();
-			break;
+		scanf("%s", cmd);
+		if (getchar() != '\n')
+			gets(arg);
 
-		case 2: /* cd 切换目录 */
+		if (!strcmp(cmd, "ls")) /* ls 显示文件列表 */
+			ls(arg);
+		else if (!strcmp(cmd, "cd")) /* cd 切换目录 */
 			cd(arg);
-			break;
-
-		case 3: /* mkdir 创建目录 */
+		else if (!strcmp(cmd, "mkdir")) /* mkdir 创建目录 */
 			mkdir(arg);
-			break;
-
-		case 4: /* touch 创建文件 */
+		else if (!strcmp(cmd, "touch")) /* touch 创建文件 */
 			touch(arg);
-			break;
-
-		case 5: /* rm 删除文件/目录 */
+		else if (!strcmp(cmd, "rm")) /* rm 删除文件/目录 */
 			rm(arg);
-			break;
-		default:
-			printf("Unknow command %s\n", cmd);
-			break;
+		else if (!strcmp(cmd, "help")) /* help 显示帮助信息 */
+		{
+			printf("可用命令如下: \n");
+			printf("ls [目录]: 显示目录下的文件列表\n");
+			printf("cd [目录]: 切换到指定的目录\n");
+			printf("mkdir [目录]: 创建一个新的目录\n");
+			printf("touch [文件]: 创建一个新的文件\n");
+			printf("rm [文件 / 目录]: 删除指定的文件或目录\n");
+			printf("help:显示帮助信息\n");
+		}
+		else
+		{
+			printf((strlen(arg) ? "未知命令\"%s %s\"" : "未知命令\"%s\""), cmd, arg);
+			puts("输入help查看帮助");
 		}
 	}
-
 	disk_close();
 	return 0;
-}
-
-/* 解析命令内容 */
-void parse_cmd(char *cmd, int *opt, char *arg)
-{
-	int i = 0;
-	int len = strlen(cmd);
-
-	*opt = 0;
-	while (i < len && isblank(cmd[i]))
-		++i;
-	while (i < len && isdigit(cmd[i]))
-	{
-		*opt = (*opt) * 10 + cmd[i++] - '0';
-	}
-
-	while (i < len && isblank(cmd[i]))
-		++i;
-	while (len > i && isblank(cmd[len - 1]))
-		--len;
-	if (i < len)
-	{
-		memcpy(arg, cmd + i, len - i);
-		arg[len - i] = '\0';
-	}
-	else
-		arg[0] = '\0';
-	return;
 }
 
 /* 输出bios_pram_block中的内容 */
