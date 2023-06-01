@@ -1,6 +1,6 @@
 #pragma once
 
-void ls();
+void ls(const char *dir);
 
 void cd(const char *dir);
 
