@@ -10,6 +10,7 @@ extern struct bios_pram_block bpb;  /* 声明可全局访问的BPB */
  * FAT12/16引导扇区信息
  * 关闭内存对齐优化，方便一次性读取赋值
  */
+#pragma pack(1)
 struct fat_boot_sector
 {
     u8 jump_ins[3];
@@ -34,7 +35,8 @@ struct fat_boot_sector
     u32 vol_id;
     u8 vol_lab[11];
     u8 fs_type[8];
-} __attribute__((packed));
+};
+#pragma pack()
 
 /*
  * BIOS参数块
