@@ -17,7 +17,7 @@ static DWORD _row_read(void *buffer, DWORD offset, DWORD size)
 
     if (size != 0 && ReadFile(_handle, buffer, size, &readsize, &over) == 0)
     {
-        printf("ERROR: disk::read buffer[%p] offset[%lu] size[%lu]\n", buffer, offset, size);
+        printf("ERROR: disk::write code[%lu] buffer[%p] offset[%lu] size[%lu] \n", GetLastError(), buffer, offset, size);
         disk_close();
         exit(-1);
     }
@@ -31,7 +31,7 @@ static DWORD _row_write(void *buffer, DWORD offset, DWORD size)
     over.Offset = offset;
     if (size != 0 && WriteFile(_handle, buffer, size, &writeensize, &over) == 0)
     {
-        printf("ERROR: disk::write buffer[%p] offset[%lu] size[%lu]\n", buffer, offset, size);
+        printf("ERROR: disk::write code[%lu] buffer[%p] offset[%lu] size[%lu] \n", GetLastError(), buffer, offset, size);
         disk_close();
         exit(-1);
     }
