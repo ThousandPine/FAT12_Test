@@ -122,7 +122,7 @@ void disk_read(void *buffer, DWORD offset, DWORD size)
         DWORD sec_cnt = (size - buff_off) / SEC_SIZE; /* 包含的扇区数 */
         DWORD read_size = SEC_SIZE * sec_cnt;
 
-        _row_read((u8 *)buffer + buff_off, offset + buff_off, sec_cnt * read_size);
+        _row_read((u8 *)buffer + buff_off, offset + buff_off, read_size);
 
         buff_off += read_size;
     }
@@ -175,7 +175,7 @@ void disk_write(void *buffer, DWORD offset, DWORD size)
         DWORD sec_cnt = (size - buff_off) / SEC_SIZE; /* 包含的扇区数 */
         DWORD read_size = SEC_SIZE * sec_cnt;
 
-        _row_write((u8 *)buffer + buff_off, offset + buff_off, sec_cnt * read_size);
+        _row_write((u8 *)buffer + buff_off, offset + buff_off, read_size);
 
         buff_off += read_size;
     }
