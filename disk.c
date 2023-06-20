@@ -9,6 +9,28 @@ static HANDLE _handle = NULL;      /* 保存在内部的"文件指针" */
 
 static const DWORD SEC_SIZE = 512; /* 预设定扇区大小 */
 
+static void _lock_vol()
+{
+    DWORD dw;
+
+    if (DeviceIoControl(_handle, FSCTL_LOCK_VOLUME, NULL, 0, NULL, 0, &dw, NULL) == 0)
+    {
+        printf("ERROR: disk::lock code[%lu]\n", GetLastError());
+        exit(-1);
+    }
+}
+
+static void _unlock_vol()
+{
+    DWORD dw;
+
+    if (DeviceIoControl(_handle, FSCTL_UNLOCK_VOLUME, NULL, 0, NULL, 0, &dw, NULL) == 0)
+    {
+        printf("ERROR: disk::lock code[%lu]\n", GetLastError());
+        exit(-1);
+    }
+}
+
 static DWORD _row_read(void *buffer, DWORD offset, DWORD size)
 {
     DWORD readsize = 0;
@@ -29,12 +51,16 @@ static DWORD _row_write(void *buffer, DWORD offset, DWORD size)
     DWORD writeensize = 0;
     OVERLAPPED over = {0};
     over.Offset = offset;
+
+    _lock_vol();
     if (size != 0 && WriteFile(_handle, buffer, size, &writeensize, &over) == 0)
     {
         printf("ERROR: disk::write code[%lu] buffer[%p] offset[%lu] size[%lu] \n", GetLastError(), buffer, offset, size);
+        _unlock_vol();
         disk_close();
         exit(-1);
     }
+    _unlock_vol();
 
     return writeensize;
 }
